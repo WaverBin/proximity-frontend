@@ -1,0 +1,60 @@
+<ion-view id="userMessagesView" cache-view="false" view-title="{{conversation.users[0].name}}">
+    <ion-content>
+        <ion-list delegate-handle="userMessageScroll">
+            <ion-item ng-repeat="message in conversation.messages" class="message-wrapper" 
+                ng-class="{'left' : user.id !== message.from, 'right': user.id == message.from}" 
+                on-hold="onMessageHold($event, $index, message)">
+                
+                <span ng-if="user.id !== message.from">
+                    <img class="profile-pic" ng-src="{{conversation.users[0].picture ? conversation.users[0].picture : 'img/person.png'}}">
+                </span>
+                
+                <span ng-if="user.id == message.from">
+                    <img class="profile-pic" ng-src="{{user.picture ? user.picture : 'img/person.png'}}">
+                    <ion-spinner icon="spiral" class="message-status spinner" ng-show="message.status == 'sending'"></ion-spinner>
+                    <i class="{{statusIcon(message.status)}}"></i>
+                </span>
+                
+                <div class="chat-bubble">
+                    <div class="message" ng-bind-html="message.content.text"></div>
+                    <div class="message-detail">
+                        <span class="message-time">
+                            {{fromNow(message.timestamp)}}
+                        </span>
+                    </div>
+                </div>
+                
+            </ion-item>
+            
+            <ion-item class="message-wrapper left is-typing" ng-class="{'show' : isSenderTyping}">
+                
+                <img class="profile-pic" ng-src="{{conversation.users[0].picture ? conversation.users[0].picture : 'img/person.png'}}">
+                <div class="chat-bubble spinner">
+                    <div class="message">
+                        <ion-spinner icon="dots"></ion-spinner>
+                    </div>
+                </div>
+                
+            </ion-item>
+            
+        </ion-list>
+    </ion-content>
+
+    <form ng-submit="sendMessage({'text' : message})" novalidate>
+        <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+            <label class="item-input-wrapper">
+                <textarea ng-model="message" class="sendMessage"
+                          placeholder="Send a message..."
+                          required minlength="1"
+                          maxlength="1000"
+                          ng-keydown="onKeyPress($event)"
+                          msd-elastic></textarea>
+            </label>
+            <div class="footer-btn-wrap">
+                <button class="button button-icon icon ion-ios-arrow-right" type="submit" ng-disabled="message.length == 0">
+                </button>
+            </div>
+        </ion-footer-bar>
+    </form>
+
+</ion-view>
