@@ -3,9 +3,9 @@ angular.module('proximity.services').factory('Conversations', function() {
   var conversations = [];
   var conversationsByUser = {};
   
-  var get = function(id) {
+    var get = function(id) {
       return _.find(conversations, function(conversation){ return conversation.id == id; }) || conversationsByUser[id];
-   };
+    };
     
     var remove = function(id) {
       delete conversationsByUser[get(id).users[0].id];
@@ -20,20 +20,20 @@ angular.module('proximity.services').factory('Conversations', function() {
     
     var setAll = function(newConversations){
       conversations = _.each(newConversations, function(conv){ return _.extend(conv, { users: _.filter(conv.users, function(u){ return u.id != user.id; }) }); });
-      _.each(_.filter(conversations, function(conv){ return conv.users.length == 1; }), function(conversation){ conversationsByUser[conversation.users[0].id] = conversation; })
-    }
+      _.each(_.filter(conversations, function(conv){ return conv.users.length == 1; }), function(conversation){ conversationsByUser[conversation.users[0].id] = conversation; });
+    };
     
     var getLastUnreadMessage = function(conversationId){
-      return _.last(_.filter(get(conversationId).messages, function(message) { return message.from != user.id && message.status != 'read' }))
-    }
+      return _.last(_.filter(get(conversationId).messages, function(message) { return message.from != user.id && message.status != 'read'; }));
+    };
     
     var all = function() {
-      return conversations;
+      return _.reject(conversations, function(conversation){ return conversation.messages.length == 0; });
     };
     
     var addMessage = function(message){
       get(message.conversationId).messages.push(message);
-    }
+    };
     
     /**
     * Build and return a message object constructed from the content

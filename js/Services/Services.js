@@ -13,22 +13,22 @@ var socketUrl = SERVER_URL[env];	                 // Server URL
 var socket = io.connect(socketUrl);                // Socket
 
 function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
 function redirectToUsers(){
-  redirectTo('users');
+    redirectTo('users');
 }
 
 function redirectToHome(){
-  redirectTo('');
+    redirectTo('');
 }
 
 function redirectToConversations(){
-  redirectTo('conversations');
+    redirectTo('conversations');
 }
 
 function toTitle(str) {
@@ -38,5 +38,5 @@ function toTitle(str) {
 }
 
 function redirectTo(section){
-  window.location.replace(window.location.origin + '/' + (window.location.search != '' ? window.location.search + '/' : '') + '#/tab/' + section)
+    window.location.replace(window.location.origin + '/' + (window.location.search != '' ? window.location.search + '/' : '') + '#/tab/' + section)
 }

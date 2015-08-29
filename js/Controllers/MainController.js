@@ -3,8 +3,7 @@ angular.module('proximity.controllers').controller('MainController', function ($
     $ionicModal.fromTemplateUrl('templates/login-modal.html', { scope: $scope, hardwareBackButtonClose: false, backdropClickToClose:false, focusFirstInput: true }).then(function (modal) {
         $scope.loginModal = modal;
         if (user){
-            $scope.user = user;
-            Socket.emit('login', user);
+            login();
         } else {
             $scope.loginModal.show();
         }
@@ -14,9 +13,16 @@ angular.module('proximity.controllers').controller('MainController', function ($
         $scope.loginModal.hide();
         user = { id: guid(), name: username, type: 'WEB' };
         localStorage.setObject('user', user);
+        login();
+    };
+    
+    function login(){
         $scope.user = user;
         Socket.emit('login', user);
-    };
+    }
+    
+    // TODO : add modal error handling from server
+    // TODO : load conversations from cache
     
     Socket.on('update:users', function (users) {
         Users.setAll(users);

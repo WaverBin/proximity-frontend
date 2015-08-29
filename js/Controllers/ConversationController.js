@@ -9,17 +9,17 @@ angular.module('proximity.controllers')
     })
     .controller('ConversationDetailController', function ($scope, $stateParams, $state, $http, Conversations, Users,
                                                           Socket, $ionicScrollDelegate) {
-        var statusClasses ={
+        var statusClasses = {
             sent: 'message-status icon ion-checkmark-circled calm',
             read: 'message-status icon ion-eye dark',
             failed: 'message-status icon ion-alert-circled energized'
-        }                                                     
+        };
+                                                         
         var _isTyping = false;
         var _typingTimeout = 0;
         $scope.message = '';
         $scope.conversation = Conversations.get($stateParams.id);
         
-        // if conversation doesn't exists locally
         if ($scope.conversation == null){
             var otherUser = Users.get($stateParams.id);
             if (otherUser != null){
@@ -27,7 +27,7 @@ angular.module('proximity.controllers')
                 Conversations.add(_.clone(conversation));
                 $scope.conversation = Conversations.get($stateParams.id);
                 Socket.emit('get:conversationId', conversation);
-            } else { // Error, the id is clearly invalid (not a user and not a conversation)
+            } else { // Id is clearly invalid (not a user and not a conversation)
                 redirectToUsers();
             }
         } else {
@@ -38,9 +38,7 @@ angular.module('proximity.controllers')
             }
         }
         
-        
         setTimeout($ionicScrollDelegate.scrollBottom(true), 300); // This doesn't work but it should
-        _emitJoinConversation($stateParams.id, user.id);
 
         $scope.sendMessage = function(messageContent){
             var message = Conversations.buildMessage(messageContent, $scope.conversation.id);
@@ -54,7 +52,7 @@ angular.module('proximity.controllers')
         $scope.statusIcon = function(status){
             var statusClass = statusClasses[status];
             return statusClass ? statusClass : 'message-status icon calm';
-        }
+        };
 
         Socket.on('isTyping', function (isSenderTyping) {
             $scope.isSenderTyping = isSenderTyping;
@@ -87,14 +85,6 @@ angular.module('proximity.controllers')
             return moment(time, 'x').fromNow();
         };
         
-        var statusIcons = {
-            sending: 'spiral'
-        };
-        
-        $scope.messageStatusIcon = function(status) {
-            return statusIcons[status];
-        };
-
         function _scrollBottom() {
             setTimeout($ionicScrollDelegate.scrollBottom(true), 300);
         }
@@ -125,14 +115,6 @@ angular.module('proximity.controllers')
          */
         function _emitTyping (isTyping) {
             Socket.emit('isTyping', isTyping);
-        }
-
-        function _emitJoinConversation (conversationId, from, to) {
-            Socket.emit('join:conversation', {
-                'conversationId' : conversationId,
-                'from' : from,
-                'to' : to
-            });
         }
     }
 );

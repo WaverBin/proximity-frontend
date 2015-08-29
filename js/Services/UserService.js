@@ -12,11 +12,11 @@ angular.module('proximity.services').factory('Users', function() {
     
     var add = function(newUser){
       users.push(newUser);
-    }
+    };
     
     var setAll = function(newUsers){
       users = newUsers;
-    }
+    };
     
     var all = function() {
       return users;
