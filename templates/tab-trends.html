@@ -1,11 +1,11 @@
-<ion-view view-title="<i class='icon ion-ios-pulse-strong'></i> Trends" class="trends">
+<ion-view view-title="<i class='icon ion-ios-pulse-strong'></i> {{L10N.trends[lang]}}" class="trends">
   <ion-content>
     <ion-list>
     <a class="item item-thumbnail-left item-icon-right" href="#" collection-repeat="trend in trends">
       <img src="{{trend.picture}}">
       <h2>{{trend.name}}</h2>
       <p>{{trend.location}}</p>
-      <p>{{trend.users.length}} people in this trend</p>
+      <p>{{trend.users.length}} {{L10N.peopleInTrend[lang]}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
     </a>
     </ion-list>

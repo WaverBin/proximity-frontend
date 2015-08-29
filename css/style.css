@@ -335,3 +335,7 @@ i.message-status {
     font-weight: bold;
     color: #363636;
 }
+
+.popup-body span.assertive{
+    font-style: italic;
+}

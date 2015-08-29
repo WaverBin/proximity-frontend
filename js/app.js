@@ -5,6 +5,9 @@ angular.module('proximity', ['ionic', 'proximity.controllers', 'proximity.servic
 .run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     $rootScope._ = window._;
+    $rootScope.L10N = L10N;
+    $rootScope.lang = lang;
+    
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {

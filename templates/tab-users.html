@@ -1,9 +1,9 @@
-<ion-view view-title="<i class='icon ion-ios-people'></i> Users" class="users">
+<ion-view view-title="<i class='icon ion-ios-people'></i> {{L10N.users[lang]}}" class="users">
   <ion-content>
     <ion-list>
       
       <ion-item class="item" ng-show="users.length == 0">
-        No users available at the moment
+        {{L10N.noAvalaibleUsers[lang]}}
       </ion-item>
       
       <ion-item class="item item-avatar item-icon-right" 
@@ -11,7 +11,7 @@
         type="item-text-wrap" 
         href="#/tab/users/{{u.id}}">
         
-        <img ng-src="{{u.picture ? u.picture : 'img/person.png'}}">
+        <img ng-src="{{u.picture}}">
         <h2>{{u.name}}</h2>
         <i class="icon ion-chevron-right icon-accessory"></i>
         

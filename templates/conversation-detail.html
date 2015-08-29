@@ -6,11 +6,11 @@
                 on-hold="onMessageHold($event, $index, message)">
                 
                 <span ng-if="user.id !== message.from">
-                    <img class="profile-pic" ng-src="{{conversation.users[0].picture ? conversation.users[0].picture : 'img/person.png'}}">
+                    <img class="profile-pic" ng-src="{{conversation.users[0].picture}}">
                 </span>
                 
                 <span ng-if="user.id == message.from">
-                    <img class="profile-pic" ng-src="{{user.picture ? user.picture : 'img/person.png'}}">
+                    <img class="profile-pic" ng-src="{{user.picture}}">
                     <ion-spinner icon="spiral" class="message-status spinner" ng-show="message.status == 'sending'"></ion-spinner>
                     <i class="{{statusIcon(message.status)}}"></i>
                 </span>
@@ -28,7 +28,7 @@
             
             <ion-item class="message-wrapper left is-typing" ng-class="{'show' : isSenderTyping}">
                 
-                <img class="profile-pic" ng-src="{{conversation.users[0].picture ? conversation.users[0].picture : 'img/person.png'}}">
+                <img class="profile-pic" ng-src="{{conversation.users[0].picture}}">
                 <div class="chat-bubble spinner">
                     <div class="message">
                         <ion-spinner icon="dots"></ion-spinner>
@@ -44,7 +44,7 @@
         <ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
             <label class="item-input-wrapper">
                 <textarea ng-model="message" class="sendMessage"
-                          placeholder="Send a message..."
+                          placeholder="{{L10N.sendMessage[lang]}}"
                           required minlength="1"
                           maxlength="1000"
                           ng-keydown="onKeyPress($event)"

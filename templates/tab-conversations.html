@@ -1,10 +1,10 @@
-<ion-view view-title="<i class='icon ion-ios-chatboxes'></i> Conversations" class="conversations">
+<ion-view view-title="<i class='icon ion-ios-chatboxes'></i> {{L10N.conversations[lang]}}" class="conversations">
   <ion-content>
     <ion-list>
       <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="conversation in conversations" type="item-text-wrap"
       href="#/tab/conversations/{{conversation.id}}">
       
-        <img ng-src="{{conversation.users[0].picture ? conversation.users[0].picture : 'img/person.png'}}">
+        <img ng-src="{{conversation.users[0].picture}}">
         <h2>{{conversation.users[0].name}}</h2>
         <p ng-class="_.last(conversation.messages).from == user.id || _.last(conversation.messages).status == 'read' ? '' : 'new-message'">{{_.last(conversation.messages).content.text}}</p>
         <i class="icon ion-chevron-right icon-accessory"></i>
