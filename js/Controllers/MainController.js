@@ -1,6 +1,6 @@
-angular.module('proximity.controllers').controller('MainController', function ($scope, $ionicModal, $http, Socket, Users, Conversations) {
+angular.module('proximity.controllers').controller('MainController', function ($scope, $ionicSideMenuDelegate, $ionicModal, $ionicPopup, $http, Socket, Users, Conversations) {
 
-    $ionicModal.fromTemplateUrl('templates/login-modal.html', { scope: $scope, hardwareBackButtonClose: false, backdropClickToClose:false, focusFirstInput: true }).then(function (modal) {
+    $ionicModal.fromTemplateUrl('templates/login-modal.html', { scope: $scope, hardwareBackButtonClose: false, backdropClickToClose: false, focusFirstInput: true }).then(function (modal) {
         $scope.loginModal = modal;
         if (user){
             login();
@@ -11,9 +11,34 @@ angular.module('proximity.controllers').controller('MainController', function ($
     
     $scope.connect = function(username){
         $scope.loginModal.hide();
-        user = { id: guid(), name: username, type: 'WEB' };
+        user = { id: guid(), name: username, type: 'WEB', picture: 'img/person.png' };
         localStorage.setObject('user', user);
         login();
+    };
+    
+    $scope.logout = function(){
+        $ionicPopup.confirm({
+            title: L10N.logout[lang],
+            template: L10N.logoutConfirmation[lang] 
+                      + (user.type == 'WEB' ? '<br/><span class="assertive">' 
+                      + L10N.accountEraseConfirmation[lang] + '</span>' : ''),
+            buttons: [
+                { 
+                    text: L10N.cancel[lang],
+                    onTap: function() {
+                        $ionicSideMenuDelegate.toggleLeft();
+                    } 
+                },
+                {
+                    text: L10N.ok[lang],
+                    type: 'button-assertive',
+                    onTap: function() { 
+                        localStorage.removeItem('user');
+                        window.location.reload();
+                    }
+                }
+            ]
+        });
     };
     
     function login(){
@@ -21,8 +46,11 @@ angular.module('proximity.controllers').controller('MainController', function ($
         Socket.emit('login', user);
     }
     
-    // TODO : add modal error handling from server
     // TODO : load conversations from cache
+    
+    Socket.on('error', function (error) {
+        $ionicPopup.alert(error); // Error must be a { title: '', template: '' } object
+    });
     
     Socket.on('update:users', function (users) {
         Users.setAll(users);

@@ -38,5 +38,5 @@ function toTitle(str) {
 }
 
 function redirectTo(section){
-    window.location.replace(window.location.origin + '/' + (window.location.search != '' ? window.location.search + '/' : '') + '#/tab/' + section)
+    window.location.replace(window.location.origin + '/' + (window.location.search != '' ? window.location.search + '/' : '') + '#/tab/' + section);
 }
