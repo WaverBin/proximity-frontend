@@ -1,5 +1,8 @@
 angular.module('proximity.controllers').controller('MainController', function ($scope, $ionicSideMenuDelegate, $ionicModal, $ionicPopup, $http, Socket, Users, Conversations) {
-
+    
+    var updateInterval;
+    var UPDATE_DELAY = 10;
+    
     $ionicModal.fromTemplateUrl('templates/login-modal.html', { scope: $scope, hardwareBackButtonClose: false, backdropClickToClose: false, focusFirstInput: true }).then(function (modal) {
         $scope.loginModal = modal;
         if (user){
@@ -10,7 +13,6 @@ angular.module('proximity.controllers').controller('MainController', function ($
     });
     
     $scope.connect = function(username){
-        $scope.loginModal.hide();
         user = { id: guid(), name: username, type: 'WEB', picture: 'img/person.png' };
         localStorage.setObject('user', user);
         login();
@@ -18,19 +20,19 @@ angular.module('proximity.controllers').controller('MainController', function ($
     
     $scope.logout = function(){
         $ionicPopup.confirm({
-            title: L10N.logout[lang],
-            template: L10N.logoutConfirmation[lang] 
+            title: l('logout'),
+            template: l('logoutConfirmation')
                       + (user.type == 'WEB' ? '<br/><span class="assertive">' 
-                      + L10N.accountEraseConfirmation[lang] + '</span>' : ''),
+                      + l('accountEraseConfirmation') + '</span>' : ''),
             buttons: [
                 { 
-                    text: L10N.cancel[lang],
+                    text: l('cancel'),
                     onTap: function() {
                         $ionicSideMenuDelegate.toggleLeft();
                     } 
                 },
                 {
-                    text: L10N.ok[lang],
+                    text: l('ok'),
                     type: 'button-assertive',
                     onTap: function() { 
                         localStorage.removeItem('user');
@@ -41,9 +43,29 @@ angular.module('proximity.controllers').controller('MainController', function ($
         });
     };
     
-    function login(){
-        $scope.user = user;
-        Socket.emit('login', user);
+    function login() {
+        navigator.geolocation.getCurrentPosition(function(pos){
+            position = getCoords(pos);
+            $scope.user = user;
+            Socket.emit('login', user);
+            $scope.loginModal.hide();
+            updateInterval = setInterval(updateUser, UPDATE_DELAY * 1000);
+            Socket.emit('get:conversations');
+        });
+    }
+    
+    function updateUser(){
+        navigator.geolocation.getCurrentPosition(function(pos){
+            var newPos = getCoords(pos);
+            if (newPos.latitude != position.latitude || newPos.longitude != position.longitude){
+                position = newPos;
+                Socket.emit('update:position', { userId: user.id, position: newPos });
+            }
+        });
+    }
+    
+    function getCoords(position){
+        return { latitude: position.coords.latitude, longitude: position.coords.longitude };
     }
     
     // TODO : load conversations from cache
@@ -72,6 +94,11 @@ angular.module('proximity.controllers').controller('MainController', function ($
         $scope.$broadcast('refresh:conversations');
     });
     
+    Socket.on('get:conversations', function (data) {
+        Conversations.setAll(data);
+        $scope.$broadcast('refresh:conversations');
+    });
+    
     Socket.on('create:conversation', function (conversation) {
         Conversations.add(conversation);
         $scope.$broadcast('refresh:conversations');
@@ -93,5 +120,10 @@ angular.module('proximity.controllers').controller('MainController', function ($
             message.status = 'read';
         }
         Conversations.addMessage(message);
+    });
+    
+    Socket.on('update:message', function (message){ 
+        // TODO : This creates a ngDupe, should be investigated
+        //Conversations.updateMessage(message);
     });
 });

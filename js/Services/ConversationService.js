@@ -35,6 +35,14 @@ angular.module('proximity.services').factory('Conversations', function() {
       get(message.conversationId).messages.push(message);
     };
     
+    var updateMessage = function(message) {
+      _.each(get(message.conversationId).messages, function(mess, index){
+          if (message.id == mess.id){
+            get(message.conversationId).messages[index] = message;
+          }
+      });
+    };
+    
     /**
     * Build and return a message object constructed from the content
     * @param content
@@ -70,6 +78,7 @@ angular.module('proximity.services').factory('Conversations', function() {
     setAll: setAll,
     getLastUnreadMessage: getLastUnreadMessage,
     buildMessage: buildMessage,
-    buildConversation: buildConversation
+    buildConversation: buildConversation,
+    updateMessage: updateMessage
   };
 });

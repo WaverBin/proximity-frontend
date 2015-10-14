@@ -9,6 +9,7 @@ var SERVER_URL = {
 
 var env =  localStorage.getItem('env') || 'dev';   // Current env
 var user = localStorage.getObject('user');	       // User data fetched from localcache in LoginController
+var position;
 var socketUrl = SERVER_URL[env];	                 // Server URL
 var socket = io.connect(socketUrl);                // Socket
 

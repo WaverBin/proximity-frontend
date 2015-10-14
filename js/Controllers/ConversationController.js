@@ -34,6 +34,7 @@ angular.module('proximity.controllers')
             var unreadMessage = Conversations.getLastUnreadMessage($stateParams.id);
             if (unreadMessage){
                 unreadMessage.status = 'read';
+                Socket.emit('update:message', unreadMessage);
                 // TODO : Emit to server message update
             }
         }
@@ -54,8 +55,11 @@ angular.module('proximity.controllers')
             return statusClass ? statusClass : 'message-status icon calm';
         };
 
-        Socket.on('isTyping', function (isSenderTyping) {
-            $scope.isSenderTyping = isSenderTyping;
+        Socket.on('isTyping', function (message) {
+            var actualConversationId = location.hash.split('/')[3];
+            if (actualConversationId && Conversations.get(actualConversationId).id == message.conversationId){
+                $scope.isSenderTyping = message.isTyping;
+            }
             // TODO : Only scroll if the user is already at the bottom
             _scrollBottom();
         });
@@ -75,6 +79,7 @@ angular.module('proximity.controllers')
                         }
                     }
                 } else {
+                    _stoppedTyping();
                     $scope.sendMessage({'text' : $scope.message});
                 }
             }
@@ -114,7 +119,10 @@ angular.module('proximity.controllers')
          * @private
          */
         function _emitTyping (isTyping) {
-            Socket.emit('isTyping', isTyping);
+            Socket.emit('isTyping', {
+                'isTyping' : isTyping,
+                'conversationId' : $scope.conversation.id
+            });
         }
     }
 );
