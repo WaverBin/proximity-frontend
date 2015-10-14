@@ -1,9 +1,9 @@
-<ion-view view-title="<i class='icon ion-ios-people'></i> {{L10N.users[lang]}}" class="users">
+<ion-view view-title="<i class='icon ion-ios-people'></i> {{l('users')}}" class="users">
   <ion-content>
     <ion-list>
       
-      <ion-item class="item" ng-show="users.length == 0">
-        {{L10N.noAvalaibleUsers[lang]}}
+      <ion-item class="item" ng-class="{'hidden' : users.length != 0}">
+        {{l('noAvailableUsers')}}
       </ion-item>
       
       <ion-item class="item item-avatar item-icon-right" 

@@ -73,3 +73,7 @@ var L10N = {
 		'fr': 'Connexion'
 	}
 };
+
+function l(key){
+	return L10N[key][lang];
+}

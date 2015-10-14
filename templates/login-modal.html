@@ -5,15 +5,15 @@
   <ion-content>
     <ion-list>
       <ion-item class="item item-divider">
-        {{L10N.enterName[lang]}}
+        {{l('enterName')}}
       </ion-item>
             
       <label class="item item-input">
-        <input type="text" placeholder="{{L10N.username[lang]}}" ng-model="username">
+        <input type="text" placeholder="{{l('username')}}" ng-model="username">
       </label>
           
       <ion-item class="item">
-        <button class="button button-block button-calm" ng-disabled="username.length < 3" ng-click="connect(username)">{{L10N.connect[lang]}}</button>
+        <button class="button button-block button-calm" ng-disabled="username.length < 3" ng-click="connect(username)">{{l('connect')}}</button>
       </ion-item>
     </ion-list>
   </ion-content>

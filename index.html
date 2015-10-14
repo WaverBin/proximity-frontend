@@ -68,7 +68,7 @@
       </ion-side-menu-content>
       <ion-side-menu side="left">
         <ion-header-bar class="bar-assertive">
-          <h1 class="title">{{L10N.settings[lang]}}</h1>
+          <h1 class="title">{{l('settings')}}</h1>
         </ion-header-bar>
         <ion-content>
           <ion-list>
@@ -88,7 +88,7 @@
             </ion-item> -->
             
             <ion-item class="item item-divider">
-              {{L10N.account[lang]}}
+              {{l('account')}}
             </ion-item>
             
             <ion-item class="item item-icon-left">
@@ -97,11 +97,13 @@
             </ion-item>
             
             <ion-item class="item">
-              <button class="button button-block button-calm" ng-click="logout()">{{L10N.logout[lang]}}</button>
+              <button class="button button-block button-calm" ng-click="logout()">{{l('logout')}}</button>
             </ion-item>
           </ion-list>
         </ion-content>
       </ion-side-menu>
     </ion-side-menus>
+  </body>
+</html>
   </body>
 </html>
